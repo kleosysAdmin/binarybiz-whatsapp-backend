@@ -1,0 +1,268 @@
+# 1. Model for Label
+class Label(models.Model):
+    labels_id = models.AutoField(primary_key=True)
+    labels_name = models.CharField(max_length=255, null=True, blank=True)
+    labels_description = models.TextField(null=True, blank=True)
+    labels_created_by = models.CharField(max_length=255, null=True, blank=True)
+    labels_updated_by = models.CharField(max_length=255, null=True, blank=True)
+    labels_is_active = models.BooleanField(default=True)
+    labels_is_deleted = models.BooleanField(default=False)
+    labels_created_at = models.DateTimeField(auto_now_add=True)
+    labels_updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "labels"
+
+# 2. Model for Attribute
+class Attribute(models.Model):
+    attributes_id = models.AutoField(primary_key=True)
+    attributes_name = models.CharField(max_length=255, null=True, blank=True)
+    attributes_created_by = models.CharField(max_length=255, null=True, blank=True)
+    attributes_updated_by = models.CharField(max_length=255, null=True, blank=True)
+    attributes_is_active = models.BooleanField(default=True)
+    attributes_is_deleted = models.BooleanField(default=False)
+    attributes_created_at = models.DateTimeField(auto_now_add=True)
+    attributes_updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "attributes"
+
+# 3. Model for Audience
+
+# Source choices
+SOURCE_CHOICES = [
+    ('organic', 'Organic'),
+    ('imported', 'Imported'),
+]
+
+# Opted choices
+OPTED_CHOICES = [
+    ('in', 'In'),
+    ('out', 'Out'),
+]
+
+class Audience(models.Model):
+    audiences_id = models.AutoField(primary_key=True)
+    audiences_name = models.CharField(max_length=255, null=True, blank=True)
+    audiences_phone_number = models.CharField(max_length=20, unique=True, null=True, blank=True)
+    audiences_email = models.CharField(max_length=255, unique=True, null=True, blank=True)
+    audiences_source = models.CharField(max_length=50, choices=SOURCE_CHOICES, null=True, blank=True)
+    audiences_opted = models.CharField(max_length=50, choices=OPTED_CHOICES, null=True, blank=True)
+    audiences_labels = models.JSONField(default=list, null=True, blank=True)
+    audiences_last_active = models.DateTimeField(null=True, blank=True)
+    audiences_created_by = models.CharField(max_length=255, null=True, blank=True)
+    audiences_updated_by = models.CharField(max_length=255, null=True, blank=True)
+    audiences_is_active = models.BooleanField(default=True)
+    audiences_is_deleted = models.BooleanField(default=False)
+    audiences_created_at = models.DateTimeField(auto_now_add=True)
+    audiences_updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "audiences"
+
+# 4. Model for AttributeValue
+class AttributeValue(models.Model):
+    attribute_values_id = models.AutoField(primary_key=True)
+    attribute_values_attributes_id = models.ForeignKey(
+        Attribute,
+        to_field="attributes_id", 
+        db_column="attribute_values_attributes_id",
+        on_delete=models.CASCADE, null=True, blank=True
+    )
+    attribute_values_audiences_id = models.ForeignKey(
+        Audience,
+        to_field="audiences_id",
+        db_column="attribute_values_audiences_id",
+        on_delete=models.CASCADE, null=True, blank=True
+    )
+    attribute_values_value = models.CharField(max_length=255, null=True, blank=True)
+    attribute_values_created_by = models.CharField(max_length=255, null=True, blank=True)
+    attribute_values_updated_by = models.CharField(max_length=255, null=True, blank=True)
+    attribute_values_is_deleted = models.BooleanField(default=False)
+    attribute_values_created_at = models.DateTimeField(auto_now_add=True)
+    attribute_values_updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "attribute_values"
+
+
+# 5. Model for MediaLibrary
+
+# Media type choices
+MEDIA_TYPE_CHOICES = [
+    ('image', 'Image'),
+    ('video', 'Video'),
+    ('audio', 'Audio'),
+    ('file', 'File'),
+]
+
+class MediaLibrary(models.Model):
+    media_libraries_id = models.AutoField(primary_key=True)
+    media_libraries_file_path = models.TextField(null=True, blank=True)
+    media_libraries_file_size = models.BigIntegerField(null=True, blank=True)
+    media_libraries_type = models.CharField(max_length=50, choices=MEDIA_TYPE_CHOICES, null=True, blank=True)
+    media_libraries_is_deleted = models.BooleanField(default=False)
+    media_libraries_created_at = models.DateTimeField(auto_now_add=True)
+    media_libraries_updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "media_libraries"
+
+
+# 6. Model for CannedMessage
+
+# Message type choices
+MESSAGE_TYPE_CHOICES = [
+    ('text', 'Text'),
+]
+
+class CannedMessage(models.Model):
+    canned_messages_id = models.AutoField(primary_key=True)
+    canned_messages_name = models.CharField(max_length=255, null=True, blank=True)
+    canned_messages_type = models.CharField(max_length=50, choices=MESSAGE_TYPE_CHOICES, null=True, blank=True)
+    canned_messages_description = models.TextField(null=True, blank=True)
+    canned_messages_is_favourite = models.BooleanField(default=False)
+    canned_messages_created_by = models.CharField(max_length=255, null=True, blank=True)
+    canned_messages_updated_by = models.CharField(max_length=255, null=True, blank=True)
+    canned_messages_is_deleted = models.BooleanField(default=False)
+    canned_messages_created_at = models.DateTimeField(auto_now_add=True)
+    canned_messages_updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "canned_messages"
+
+
+
+# 7. Model for ProfileChatSettings
+
+# Vertical choices
+VERTICAL_CHOICES = [
+    ('ecommerce', 'ECommerce'),
+    ('education', 'Education'),
+    ('finance', 'Finance'),
+    ('health', 'Health'),
+]
+
+class ProfileChatSettings(models.Model):
+    profile_chat_settings_id = models.AutoField(primary_key=True)
+    profile_chat_settings_profile_picture_path = models.TextField(null=True, blank=True)
+    profile_chat_settings_description = models.CharField(max_length=256, null=True, blank=True)
+    profile_chat_settings_address = models.CharField(max_length=256, null=True, blank=True)
+    profile_chat_settings_email = models.CharField(max_length=256, null=True, blank=True)
+    profile_chat_settings_vertical = models.CharField(
+        max_length=50, 
+        choices=VERTICAL_CHOICES,
+        null=True, 
+        blank=True
+    )
+    profile_chat_settings_websites = models.JSONField(default=list, null=True, blank=True)
+    profile_chat_settings_auto_resolve = models.BooleanField(default=True)
+    profile_chat_settings_welcome_message = models.TextField(null=True, blank=True)
+    profile_chat_settings_off_hours_message = models.TextField(null=True, blank=True)
+    profile_chat_settings_timezone = models.CharField(max_length=255, null=True, blank=True)
+    profile_chat_settings_created_by = models.CharField(max_length=255, null=True, blank=True)
+    profile_chat_settings_updated_by = models.CharField(max_length=255, null=True, blank=True)
+    profile_chat_settings_is_deleted = models.BooleanField(default=False)
+    profile_chat_settings_created_at = models.DateTimeField(auto_now_add=True)
+    profile_chat_settings_updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "profile_chat_settings"
+
+
+# 8. Model for WorkingHours
+
+# Day choices
+DAY_CHOICES = [
+    ('monday', 'Monday'),
+    ('tuesday', 'Tuesday'),
+    ('wednesday', 'Wednesday'),
+    ('thursday', 'Thursday'),
+    ('friday', 'Friday'),
+    ('saturday', 'Saturday'),
+    ('sunday', 'Sunday'),
+]
+
+class WorkingHours(models.Model):
+    working_hours_id = models.AutoField(primary_key=True)
+    working_hours_profile_chat_settings_id = models.ForeignKey(
+        ProfileChatSettings,
+        to_field="profile_chat_settings_id",
+        db_column="working_hours_profile_chat_settings_id",
+        on_delete=models.CASCADE, null=True, blank=True
+    )
+    working_hours_day = models.CharField(max_length=50, choices=DAY_CHOICES, null=True, blank=True)
+    working_hours_enabled = models.BooleanField(default=True)
+    working_hours_start = models.TimeField(null=True, blank=True)
+    working_hours_end = models.TimeField(null=True, blank=True)
+    working_hours_created_at = models.DateTimeField(auto_now_add=True)
+    working_hours_updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "working_hours"
+
+
+# 9. Model for OptKeyword
+
+KEYWORD_TYPE_CHOICES = [
+    ('opt_in', 'Opt-in'),
+    ('opt_out', 'Opt-out'),
+]
+
+class OptKeyword(models.Model):
+    opt_keywords_id = models.AutoField(primary_key=True)
+    opt_keywords_type = models.CharField(max_length=50, choices=KEYWORD_TYPE_CHOICES, null=True, blank=True)
+    opt_keywords_keyword = models.JSONField(default=list, null=True, blank=True)
+    opt_keywords_automated_response = models.TextField(null=True, blank=True)
+    opt_keywords_is_deleted = models.BooleanField(default=False)
+    opt_keywords_created_at = models.DateTimeField(auto_now_add=True)
+    opt_keywords_updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "opt_keywords"
+
+
+# 10. Model for Feature
+class Feature(models.Model):
+    features_id = models.AutoField(primary_key=True)
+    features_keys = models.CharField(max_length=50, unique=True, null=True, blank=True)
+    features_name = models.CharField(max_length=255, null=True, blank=True)
+    features_is_active = models.BooleanField(default=True)
+    features_created_at = models.DateTimeField(auto_now_add=True)
+    features_updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'features'
+
+# 11. Model for FeatureAction
+class FeatureAction(models.Model):
+    feature_actions_id = models.AutoField(primary_key=True)
+    feature_actions_keys = models.CharField(max_length=50, unique=True, null=True, blank=True)
+    feature_actions_features_keys = models.ForeignKey(Feature, to_field='features_keys', db_column='feature_actions_features_keys', on_delete=models.CASCADE, null=True, blank=True)
+    feature_actions_action = models.CharField(max_length=255, null=True, blank=True)
+    feature_actions_action_keys = models.CharField(max_length=50, null=True, blank=True)
+    feature_actions_is_active = models.BooleanField(default=True)
+    feature_actions_created_at = models.DateTimeField(auto_now_add=True)
+    feature_actions_updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'feature_actions'
+
+# 12. Model for Permission
+class Permission(models.Model):
+    permissions_id = models.AutoField(primary_key=True)
+    permissions_unique_id = models.CharField(max_length=255, unique=True, null=True, blank=True)
+    permissions_branches_unique_id = models.CharField(max_length=255, null=True, blank=True)
+    permissions_user_roles_keys = models.CharField(max_length=50, null=True, blank=True)
+    permissions_features_keys = models.ForeignKey(Feature, to_field='features_keys', db_column='permissions_features_keys', on_delete=models.CASCADE, null=True, blank=True)
+    permissions_feature_actions_keys = models.JSONField(default=list, null=True, blank=True)
+    permissions_can_deleted = models.BooleanField(default=False)
+    permissions_created_by = models.CharField(max_length=255, null=True, blank=True)
+    permissions_updated_by = models.CharField(max_length=255, null=True, blank=True)
+    permissions_is_active = models.BooleanField(default=True)
+    permissions_is_deleted = models.BooleanField(default=False)
+    permissions_created_at = models.DateTimeField(auto_now_add=True)
+    permissions_updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'permissions'

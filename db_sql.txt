@@ -1,0 +1,192 @@
+-- 1. SQL for labels
+CREATE TABLE labels(
+    labels_id SERIAL PRIMARY KEY,
+    labels_name VARCHAR(255) DEFAULT NULL,
+    labels_description TEXT DEFAULT NULL,
+    labels_created_by VARCHAR(255) DEFAULT NULL,
+    labels_updated_by VARCHAR(255) DEFAULT NULL, 
+    labels_is_active BOOLEAN DEFAULT TRUE,
+    labels_is_deleted BOOLEAN DEFAULT FALSE,
+    labels_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    labels_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- 2. SQL for attributes
+CREATE TABLE attributes(
+    attributes_id SERIAL PRIMARY KEY,
+    attributes_name VARCHAR(255) DEFAULT NULL,
+    attributes_created_by VARCHAR(255) DEFAULT NULL,
+    attributes_updated_by VARCHAR(255) DEFAULT NULL, 
+    attributes_is_active BOOLEAN DEFAULT TRUE,
+    attributes_is_deleted BOOLEAN DEFAULT FALSE,
+    attributes_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    attributes_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. SQL for audiences
+CREATE TABLE audiences(
+    audiences_id SERIAL PRIMARY KEY,
+    audiences_name VARCHAR(255) DEFAULT NULL,
+    audiences_phone_number VARCHAR(20) UNIQUE DEFAULT NULL,
+    audiences_email VARCHAR(255) UNIQUE DEFAULT NULL,
+    audiences_source VARCHAR(50) DEFAULT NULL CHECK (audiences_source IN ('organic', 'imported')),
+    audiences_opted VARCHAR(50) DEFAULT NULL CHECK (audiences_opted IN ('in', 'out')),
+    audiences_labels JSONB DEFAULT NULL,
+    audiences_last_active TIMESTAMP DEFAULT NULL,
+    audiences_created_by VARCHAR(255) DEFAULT NULL,
+    audiences_updated_by VARCHAR(255) DEFAULT NULL,
+    audiences_is_active BOOLEAN DEFAULT TRUE,
+    audiences_is_deleted BOOLEAN DEFAULT FALSE,
+    audiences_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    audiences_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 4. SQL for attribute_values
+CREATE TABLE attribute_values(
+    attribute_values_id SERIAL PRIMARY KEY,
+    attribute_values_attributes_id INT DEFAULT NULL,
+    attribute_values_audiences_id INT DEFAULT NULL,
+    attribute_values_value VARCHAR(255) DEFAULT NULL,
+    attribute_values_created_by VARCHAR(255) DEFAULT NULL,
+    attribute_values_updated_by VARCHAR(255) DEFAULT NULL,
+    attribute_values_is_deleted BOOLEAN DEFAULT FALSE,
+    attribute_values_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    attribute_values_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_attribute_values_attributes_id
+        FOREIGN KEY (attribute_values_attributes_id)
+        REFERENCES attributes(attributes_id)
+        ON DELETE CASCADE,
+        
+    CONSTRAINT fk_attribute_values_audiences_id
+        FOREIGN KEY (attribute_values_audiences_id)
+        REFERENCES audiences(audiences_id)
+        ON DELETE CASCADE
+);
+
+
+-- 5. SQL for media_libraries
+CREATE TABLE media_libraries(
+    media_libraries_id SERIAL PRIMARY KEY,
+    media_libraries_file_path TEXT DEFAULT NULL,
+    media_libraries_file_size BIGINT DEFAULT NULL,
+    media_libraries_type VARCHAR(50) DEFAULT NULL CHECK (media_libraries_type IN ('image', 'video', 'audio', 'file')),
+    media_libraries_is_deleted BOOLEAN DEFAULT FALSE,
+    media_libraries_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    media_libraries_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 6. SQL for canned_messages
+CREATE TABLE canned_messages(
+    canned_messages_id SERIAL PRIMARY KEY,
+    canned_messages_name VARCHAR(255) DEFAULT NULL,
+    canned_messages_type VARCHAR(50) DEFAULT NULL CHECK (canned_messages_type IN ('text')),
+    canned_messages_description TEXT DEFAULT NULL,
+    canned_messages_is_favourite BOOLEAN DEFAULT FALSE,
+    canned_messages_created_by VARCHAR(255) DEFAULT NULL,
+    canned_messages_updated_by VARCHAR(255) DEFAULT NULL,
+    canned_messages_is_deleted BOOLEAN DEFAULT FALSE,
+    canned_messages_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    canned_messages_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- 7. SQL for profile_chat_settings
+CREATE TABLE profile_chat_settings(
+    profile_chat_settings_id SERIAL PRIMARY KEY,
+    profile_chat_settings_profile_picture_path TEXT DEFAULT NULL,
+    profile_chat_settings_description VARCHAR(256) DEFAULT NULL,
+    profile_chat_settings_address VARCHAR(256) DEFAULT NULL,
+    profile_chat_settings_email VARCHAR(256) DEFAULT NULL,
+    profile_chat_settings_vertical VARCHAR(50) DEFAULT NULL CHECK (profile_chat_settings_vertical IN ('ecommerce', 'education', 'finance', 'health')),
+    profile_chat_settings_websites JSONB DEFAULT NULL,
+    profile_chat_settings_auto_resolve BOOLEAN DEFAULT TRUE,
+    profile_chat_settings_welcome_message TEXT DEFAULT NULL,
+    profile_chat_settings_off_hours_message TEXT DEFAULT NULL,
+    profile_chat_settings_timezone VARCHAR(255) DEFAULT NULL,
+    profile_chat_settings_created_by VARCHAR(255) DEFAULT NULL,
+    profile_chat_settings_updated_by VARCHAR(255) DEFAULT NULL,
+    profile_chat_settings_is_deleted BOOLEAN DEFAULT FALSE,
+    profile_chat_settings_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    profile_chat_settings_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 8. SQL for working_hours
+CREATE TABLE working_hours(
+    working_hours_id SERIAL PRIMARY KEY,
+    working_hours_profile_chat_settings_id INT DEFAULT NULL,
+    working_hours_day VARCHAR(50) DEFAULT NULL CHECK (working_hours_day IN ('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday')),
+    working_hours_enabled BOOLEAN DEFAULT TRUE,
+    working_hours_start TIME DEFAULT NULL,
+    working_hours_end TIME DEFAULT NULL,
+    working_hours_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    working_hours_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_working_hours_profile_chat_settings_id
+        FOREIGN KEY (working_hours_profile_chat_settings_id)
+        REFERENCES profile_chat_settings(profile_chat_settings_id)
+        ON DELETE CASCADE
+);
+
+
+-- 9. SQL for opt_keywords
+CREATE TABLE opt_keywords(
+    opt_keywords_id SERIAL PRIMARY KEY,
+    opt_keywords_type VARCHAR(50) DEFAULT NULL CHECK (opt_keywords_type IN ('opt_in', 'opt_out')),
+    opt_keywords_keyword JSONB DEFAULT NULL,
+    opt_keywords_automated_response TEXT DEFAULT NULL,
+    opt_keywords_is_deleted BOOLEAN DEFAULT FALSE,
+    opt_keywords_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    opt_keywords_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- 10. SQL for features
+CREATE TABLE features (
+    features_id SERIAL PRIMARY KEY,
+    features_keys VARCHAR(50) UNIQUE DEFAULT NULL,
+    features_name VARCHAR(255) DEFAULT NULL,
+    features_is_active BOOLEAN DEFAULT TRUE,
+    features_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    features_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 11. SQL for feature_actions
+CREATE TABLE feature_actions (
+    feature_actions_id SERIAL PRIMARY KEY,
+    feature_actions_keys VARCHAR(50) UNIQUE DEFAULT NULL,
+    feature_actions_features_keys VARCHAR(50) DEFAULT NULL,
+    feature_actions_action VARCHAR(255) DEFAULT NULL,
+    feature_actions_action_keys VARCHAR(50) DEFAULT NULL,
+    feature_actions_is_active BOOLEAN DEFAULT TRUE,
+    feature_actions_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    feature_actions_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_feature_actions_features_keys
+        FOREIGN KEY (feature_actions_features_keys)
+        REFERENCES features(features_keys)
+        ON DELETE CASCADE
+);
+
+-- 12. SQL for permissions
+CREATE TABLE permissions (
+    permissions_id SERIAL PRIMARY KEY,
+    permissions_unique_id VARCHAR(255) UNIQUE DEFAULT NULL,
+    permissions_branches_unique_id VARCHAR(255) DEFAULT NULL,
+    permissions_user_roles_keys VARCHAR(50) DEFAULT NULL,
+    permissions_features_keys VARCHAR(50) DEFAULT NULL,
+    permissions_feature_actions_keys JSONB DEFAULT NULL,
+    permissions_can_deleted BOOLEAN DEFAULT FALSE,
+    permissions_created_by VARCHAR(255) DEFAULT NULL,
+    permissions_updated_by VARCHAR(255) DEFAULT NULL,
+    permissions_is_active BOOLEAN DEFAULT TRUE,
+    permissions_is_deleted BOOLEAN DEFAULT FALSE,
+    permissions_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    permissions_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_permissions_features_keys
+        FOREIGN KEY (permissions_features_keys)
+        REFERENCES features(features_keys)
+        ON DELETE CASCADE
+);

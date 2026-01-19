@@ -1,0 +1,19 @@
+python -m venv venv
+venv\Scripts\activate 
+django-admin startproject binarybiz_whatsapp_backend . 
+
+pip install django psycopg2-binary djangorestframework django-cors-headers djangorestframework-simplejwt requests
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'binarybiz_whatsapp',
+        'USER': 'postgres',
+        'PASSWORD': 'root',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+
+deactivate
