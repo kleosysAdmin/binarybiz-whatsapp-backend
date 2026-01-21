@@ -1,0 +1,35 @@
+-- feature dummy entry 
+INSERT INTO features (features_keys, features_name, features_is_active) VALUES
+('label', 'Label', true),
+('audience', 'Audience', true),
+('Attributes', 'Attributes', true),
+('canned_message', 'Canned Message', true),
+('media_library', 'Media Library', true);
+
+
+
+-- feature actions dummy entry 
+INSERT INTO feature_actions (
+    feature_actions_keys,
+    feature_actions_features_keys,
+    feature_actions_action,
+    feature_actions_action_keys,
+    feature_actions_is_active
+) VALUES
+-- Label actions
+('label_create', 'label', 'Create Label', 'create', true),
+('label_read', 'label', 'Read Label', 'read', true),
+('label_update', 'label', 'Update Label', 'update', true),
+('label_delete', 'label', 'Delete Label', 'delete', true),
+
+-- Audience actions
+('audience_create', 'audience', 'Create Audience', 'create', true),
+('audience_read', 'audience', 'Read Audience', 'read', true),
+('audience_update', 'audience', 'Update Audience', 'update', true),
+('audience_delete', 'audience', 'Delete Audience', 'delete', true),
+
+-- Attributes actions
+('attributes_create', 'Attributes', 'Create Attribute', 'create', true),
+('attributes_read', 'Attributes', 'Read Attribute', 'read', true),
+('attributes_update', 'Attributes', 'Update Attribute', 'update', true),
+('attributes_delete', 'Attributes', 'Delete Attribute', 'delete', true);

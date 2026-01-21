@@ -105,13 +105,15 @@ class PermissionAPIView(APIView):
 
         if not branch_key:
             return Response({
-                "status": False,
+                "success": False,
+                "status": 400,
                 "message": "branch key are required."
             }, status=status.HTTP_400_BAD_REQUEST)
         
         if not role_key:
             return Response({
-                "status": False,
+                "success": False,
+                "status": 400,
                 "message": "role key are required."
             }, status=status.HTTP_400_BAD_REQUEST)
         
@@ -152,7 +154,8 @@ class PermissionAPIView(APIView):
             })
 
         return Response({
-            "status": True,
+            "success": True,
+            "status": 200,
             "message": "Permissions fetched successfully.",
             "data": response_data
         }, status=status.HTTP_200_OK)

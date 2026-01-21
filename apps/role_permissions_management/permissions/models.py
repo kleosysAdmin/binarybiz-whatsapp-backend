@@ -10,7 +10,7 @@ class Permission(models.Model):
     permissions_branches_unique_id = models.CharField(max_length=255, null=True, blank=True)
     permissions_user_roles_keys = models.CharField(max_length=50, null=True, blank=True) 
     permissions_features_keys = models.ForeignKey(Feature, to_field='features_keys', db_column='permissions_features_keys', on_delete=models.CASCADE, null=True, blank=True)
-    permissions_feature_actions_keys = models.JSONField(default="list", null=True, blank=True)
+    permissions_feature_actions_keys = models.JSONField(default=list, null=True, blank=True)
     permissions_can_deleted = models.BooleanField(default=False)
     permissions_created_by = models.CharField(max_length=255, null=True, blank=True)
     permissions_updated_by = models.CharField(max_length=255, null=True, blank=True)
