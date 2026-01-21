@@ -27,6 +27,7 @@ SECRET_KEY = 'django-insecure-dm83yc4(+!-ohni7pr^k*3wgae#(ilgep7sz2v0zw&kzweux@0
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
 AUTH_SERVICE_BASE_URL = "http://127.0.0.1:8000/"
 
 from corsheaders.defaults import default_headers

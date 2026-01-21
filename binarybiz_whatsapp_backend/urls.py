@@ -21,17 +21,17 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/',include('apps.labels.urls')),
-    path('api/v1/',include('apps.attributes.urls')),
-    path('api/v1/',include('apps.attribute_values.urls')),
-    path('api/v1/',include('apps.audiences.urls')),
-    path('api/v1/',include('apps.canned_messages.urls')),
-    path('api/v1/',include('apps.media_libraries.urls')),
-    path('api/v1/',include('apps.profile_chat_settings.urls')),
-    path('api/v1/',include('apps.opt_keywords.urls')),
-    path('api/v1/', include('apps.role_permissions_management.permissions.urls')),
-    path('api/v1/', include('apps.role_permissions_management.roles.urls')),
-    path('api/v1/', include('apps.role_permissions_management.feature_actions.urls')),
+    path('api/v1/whatsapp/',include('apps.labels.urls')),
+    path('api/v1/whatsapp/',include('apps.attributes.urls')),
+    path('api/v1/whatsapp/',include('apps.attribute_values.urls')),
+    path('api/v1/whatsapp/',include('apps.audiences.urls')),
+    path('api/v1/whatsapp/',include('apps.canned_messages.urls')),
+    path('api/v1/whatsapp/',include('apps.media_libraries.urls')),
+    path('api/v1/whatsapp/',include('apps.profile_chat_settings.urls')),
+    path('api/v1/whatsapp/',include('apps.opt_keywords.urls')),
+    path('api/v1/whatsapp/', include('apps.role_permissions_management.permissions.urls')),
+    path('api/v1/whatsapp/', include('apps.role_permissions_management.roles.urls')),
+    path('api/v1/whatsapp/', include('apps.role_permissions_management.feature_actions.urls')),
 ]
 
 
