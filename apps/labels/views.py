@@ -15,7 +15,7 @@ from apps.role_permissions_management.permissions.decorators import feature_perm
 class LabelListCreateView(APIView):
 
     # GET requests to fetch all non-deleted labels records
-    @feature_permission_required(feature_key='label', action_key='read')
+    # @feature_permission_required(feature_key='label', action_key='read')
     def get(self, request):
         try:
             labels = Label.objects.filter(labels_is_deleted=False)
@@ -113,7 +113,7 @@ class LabelListCreateView(APIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # POST requests to create a new label
-    @feature_permission_required(feature_key='label', action_key='create')
+    # @feature_permission_required(feature_key='label', action_key='create')
     @transaction.atomic
     def post(self, request):
         try:
@@ -148,7 +148,7 @@ class LabelListCreateView(APIView):
 class LabelDetailView(APIView):
 
     # Retrieve label by ID if not soft deleted
-    @feature_permission_required(feature_key='label', action_key='read')
+    # @feature_permission_required(feature_key='label', action_key='read')
     def get(self, request, labels_id):
         try:
             label = Label.objects.get(labels_id=labels_id, labels_is_deleted=False)
@@ -176,7 +176,7 @@ class LabelDetailView(APIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # update the Label
-    @feature_permission_required(feature_key='label', action_key='update')
+    # @feature_permission_required(feature_key='label', action_key='update')
     @transaction.atomic
     def put(self, request, labels_id):
         try:
@@ -214,7 +214,7 @@ class LabelDetailView(APIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # Mark the Label as soft deleted
-    @feature_permission_required(feature_key='label', action_key='delete')
+    # @feature_permission_required(feature_key='label', action_key='delete')
     @transaction.atomic
     def delete(self, request, labels_id):
         try:
