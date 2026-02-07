@@ -7,7 +7,6 @@ INSERT INTO features (features_keys, features_name, features_is_active) VALUES
 ('media_library', 'Media Library', true);
 
 
-
 -- feature actions dummy entry 
 INSERT INTO feature_actions (
     feature_actions_keys,
@@ -33,3 +32,58 @@ INSERT INTO feature_actions (
 ('attributes_read', 'Attributes', 'Read Attribute', 'read', true),
 ('attributes_update', 'Attributes', 'Update Attribute', 'update', true),
 ('attributes_delete', 'Attributes', 'Delete Attribute', 'delete', true);
+
+
+-- Insert profile chat settings dummy entry
+INSERT INTO profile_chat_settings (
+    profile_chat_settings_profile_picture_path,
+    profile_chat_settings_description,
+    profile_chat_settings_address,
+    profile_chat_settings_email,
+    profile_chat_settings_vertical,
+    profile_chat_settings_websites,
+    profile_chat_settings_auto_resolve,
+    profile_chat_settings_welcome_message,
+    profile_chat_settings_off_hours_message,
+    profile_chat_settings_timezone,
+    profile_chat_settings_created_by,
+    profile_chat_settings_updated_by,
+    profile_chat_settings_is_deleted,
+    profile_chat_settings_created_at,
+    profile_chat_settings_updated_at
+) VALUES (
+    'profile_pictures/company_logo.jpg',
+    'Example Company Description',
+    '123 Main St, New York, USA',
+    'contact@example.com',
+    'ecommerce',
+    '["https://www.example.com", "https://shop.example.com"]',
+    true,
+    'Hello! How can we help you today?',
+    'We are currently offline. Please leave a message.',
+    'America/New_York',
+    'admin_user',
+    'admin_user',
+    false,
+    NOW(),
+    NOW()
+);
+
+-- Insert working hours for Monday to Friday
+INSERT INTO working_hours (
+    working_hours_profile_chat_settings_id,
+    working_hours_day,
+    working_hours_enabled,
+    working_hours_start,
+    working_hours_end,
+    working_hours_created_at,
+    working_hours_updated_at
+) VALUES 
+-- Assuming profile_chat_settings_id = 1
+(1, 'monday', true, '09:00:00', '17:00:00', NOW(), NOW()),
+(1, 'tuesday', true, '09:00:00', '17:00:00', NOW(), NOW()),
+(1, 'wednesday', true, '09:00:00', '17:00:00', NOW(), NOW()),
+(1, 'thursday', true, '09:00:00', '17:00:00', NOW(), NOW()),
+(1, 'friday', true, '09:00:00', '17:00:00', NOW(), NOW()),
+(1, 'saturday', false, NULL, NULL, NOW(), NOW()),
+(1, 'sunday', false, NULL, NULL, NOW(), NOW());

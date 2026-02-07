@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-# AUTH_SERVICE_BASE_URL = "http://127.0.0.1:8000/"
+AUTH_SERVICE_BASE_URL = "http://127.0.0.1:8000/"
 
 from corsheaders.defaults import default_headers
 
@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'rest_framework',
     'corsheaders',
     'apps.labels',
     'apps.attributes',
